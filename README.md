@@ -1,7 +1,10 @@
 # azure-samples
 
+## Requirements
 
-## Resource Groups
+- Azure CLI
+
+## Create/Delete Resource Groups az cli commands
 
 `az group create --location uksouth --resource-group rg-azure-samples`
 
