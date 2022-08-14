@@ -9,19 +9,26 @@ IConfiguration config = new ConfigurationBuilder()
 
 var connectionString = config.GetSection("CosmosConnectionString")?.Value;
 
-await CreateDB("sample-db");
+var dbName = "sample-db";
+var containerName = "sample-container";
 
-await CreateContainer("sample-db", "sample-container", "/location");
+await CreateDB(dbName);
+
+await CreateContainer(dbName, containerName, "/location");
 
 
 //Write Item
+var newReading = new Reading { Location = "Garden" };
 
-var reading = new Reading { Location = "Garden" };
-
-await AddItem("sample-db", "sample-container", reading);
-//Read Item
+await AddItem(dbName, containerName, newReading);
 
 //Read Items
+var readings = await GetAllReadings(dbName, containerName);
+
+foreach(var reading in readings)
+{
+    Console.WriteLine($"Time {reading.ReadingTime} - Location {reading.Location}");
+}
 
 //Change Item
 
@@ -48,4 +55,30 @@ async Task AddItem(string databaseName, string containerName, Reading item)
     var container = database.GetContainer(containerName);
 
     await container.CreateItemAsync<Reading>(item);
+}
+
+async Task<IEnumerable<Reading>> GetAllReadings(string databaseName, string containerName)
+{
+    var cosmosClient = new CosmosClient(connectionString);
+
+    var database = cosmosClient.GetDatabase(databaseName);
+    var container = database.GetContainer(containerName);
+
+    var queryDefinition = new QueryDefinition("SELECT * FROM c");
+
+    var feedIterator = container.GetItemQueryIterator<Reading>(queryDefinition);
+
+    var result = new List<Reading>();
+
+    while(feedIterator.HasMoreResults)
+    {
+        var response = await feedIterator.ReadNextAsync();
+
+        foreach(var reading in response)
+        {
+            result.Add(reading);
+        }
+    }
+
+    return result;
 }
