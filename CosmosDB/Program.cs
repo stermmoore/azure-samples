@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using CosmosDB;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 
 IConfiguration config = new ConfigurationBuilder()
@@ -15,6 +16,9 @@ await CreateContainer("sample-db", "sample-container", "/location");
 
 //Write Item
 
+var reading = new Reading { Location = "Garden" };
+
+await AddItem("sample-db", "sample-container", reading);
 //Read Item
 
 //Read Items
@@ -34,4 +38,14 @@ async Task CreateContainer(string databaseName, string containerName, string par
     var database = cosmosClient.GetDatabase(databaseName);
 
     await database.CreateContainerIfNotExistsAsync(containerName, partitionKey);
+}
+
+async Task AddItem(string databaseName, string containerName, Reading item)
+{
+    var cosmosClient = new CosmosClient(connectionString);
+
+    var database = cosmosClient.GetDatabase(databaseName);
+    var container = database.GetContainer(containerName);
+
+    await container.CreateItemAsync<Reading>(item);
 }
