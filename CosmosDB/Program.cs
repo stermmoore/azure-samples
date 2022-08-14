@@ -8,4 +8,10 @@ IConfiguration config = new ConfigurationBuilder()
 
 var connectionString = config.GetSection("CosmosConnectionString")?.Value;
 
-var cosmosClient = new CosmosClient(connectionString);
+await CreateDB("sample-db");
+
+async Task CreateDB(string dbName)
+{
+    var cosmosClient = new CosmosClient(connectionString);
+    await cosmosClient.CreateDatabaseIfNotExistsAsync(dbName);
+}
