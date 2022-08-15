@@ -11,6 +11,7 @@ namespace CosmosDB
         public Guid id { get; set; } = Guid.NewGuid();
         public string Location { get; set; }
         public DateTime ReadingTime { get; set; } = DateTime.UtcNow;
+        public bool? IsVerified { get; set; }
 
     }
 }

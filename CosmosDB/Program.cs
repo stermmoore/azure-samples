@@ -31,6 +31,13 @@ foreach(var reading in readings)
 }
 
 //Change Item
+var existingReading = readings.First();
+
+existingReading.IsVerified = true;
+
+await Update(dbName, containerName, existingReading);
+
+
 
 async Task CreateDB(string dbName)
 {
@@ -55,6 +62,16 @@ async Task AddItem(string databaseName, string containerName, Reading item)
     var container = database.GetContainer(containerName);
 
     await container.CreateItemAsync<Reading>(item);
+}
+
+async Task Update(string databaseName, string containerName, Reading item)
+{
+    var cosmosClient = new CosmosClient(connectionString);
+
+    var database = cosmosClient.GetDatabase(databaseName);
+    var container = database.GetContainer(containerName);
+
+    await container.UpsertItemAsync(item);
 }
 
 async Task<IEnumerable<Reading>> GetAllReadings(string databaseName, string containerName)
