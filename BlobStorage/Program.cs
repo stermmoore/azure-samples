@@ -11,4 +11,6 @@ var connectionString = config.GetSection("BlobConnectionString")?.Value;
 
 var blobServiceClient = new BlobServiceClient(connectionString);
 
-await blobServiceClient.CreateBlobContainerAsync("test-blob");
+var containerClient = blobServiceClient.GetBlobContainerClient("test-blobs");
+
+await containerClient.CreateIfNotExistsAsync();
