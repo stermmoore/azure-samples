@@ -18,4 +18,6 @@ await containerClient.CreateIfNotExistsAsync();
 
 var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
 
-var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt");
+
+var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt", 
+    new BlobHttpHeaders { ContentType = "text/plain" });
