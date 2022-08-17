@@ -21,3 +21,12 @@ var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
 
 var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt", 
     new BlobHttpHeaders { ContentType = "text/plain" });
+
+
+
+var blobListPage = containerClient.GetBlobsAsync();
+
+await foreach(var page in blobListPage)
+{
+    Console.WriteLine(page.Name);
+}
