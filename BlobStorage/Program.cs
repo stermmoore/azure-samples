@@ -12,21 +12,33 @@ var connectionString = config.GetSection("BlobConnectionString")?.Value;
 
 var blobServiceClient = new BlobServiceClient(connectionString);
 
+//Create container if it doesnt exist
 var containerClient = blobServiceClient.GetBlobContainerClient("test-blobs");
 
 await containerClient.CreateIfNotExistsAsync();
 
-var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
+//Upload a blob to the container
+var blobId = Guid.NewGuid().ToString();
 
+var blobClient = containerClient.GetBlobClient(blobId);
 
 var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt", 
     new BlobHttpHeaders { ContentType = "text/plain" });
 
 
-
+//List all blobs in a container
 var blobListPage = containerClient.GetBlobsAsync();
 
 await foreach(var page in blobListPage)
 {
     Console.WriteLine(page.Name);
 }
+
+//Get the contents of a blob
+var blobClientForDownload = containerClient.GetBlobClient(blobId);
+
+var downloadResult = await blobClientForDownload.DownloadContentAsync();
+
+var blobContents = downloadResult.Value.Content.ToString();
+
+Console.WriteLine(blobContents);
