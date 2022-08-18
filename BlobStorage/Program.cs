@@ -22,23 +22,30 @@ var blobId = Guid.NewGuid().ToString();
 
 var blobClient = containerClient.GetBlobClient(blobId);
 
-var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt", 
+var blobInfo = await blobClient.UploadAsync("MyTestBlobContents.txt",
     new BlobHttpHeaders { ContentType = "text/plain" });
 
 
 //List all blobs in a container
 var blobListPage = containerClient.GetBlobsAsync();
 
-await foreach(var page in blobListPage)
+await foreach (var page in blobListPage)
 {
     Console.WriteLine(page.Name);
 }
 
-//Get the contents of a blob
-var blobClientForDownload = containerClient.GetBlobClient(blobId);
+await OutputBlobContents(containerClient, blobId);
 
-var downloadResult = await blobClientForDownload.DownloadContentAsync();
 
-var blobContents = downloadResult.Value.Content.ToString();
+static async Task OutputBlobContents(BlobContainerClient containerClient, string blobId)
+{
+    var blobClient = containerClient.GetBlobClient(blobId);
 
-Console.WriteLine(blobContents);
+    var downloadResult = await blobClient.DownloadContentAsync();
+
+    var blobContents = downloadResult.Value.Content.ToString();
+
+    Console.WriteLine(blobContents);
+}
+
+
