@@ -1,6 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -8,12 +10,13 @@ IConfiguration config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetSection("BlobConnectionString")?.Value;
+var containerName = "test-blobs";
 
 
 var blobServiceClient = new BlobServiceClient(connectionString);
 
 //Create container if it doesnt exist
-var containerClient = blobServiceClient.GetBlobContainerClient("test-blobs");
+var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
 await containerClient.CreateIfNotExistsAsync();
 
@@ -36,6 +39,10 @@ await foreach (var page in blobListPage)
 
 await OutputBlobContents(containerClient, blobId);
 
+await AppendToABlob(connectionString, containerName);
+
+await OutputBlobContents(containerClient, "appendBlob");
+
 
 static async Task OutputBlobContents(BlobContainerClient containerClient, string blobId)
 {
@@ -48,4 +55,18 @@ static async Task OutputBlobContents(BlobContainerClient containerClient, string
     Console.WriteLine(blobContents);
 }
 
+static async Task AppendToABlob(string? connectionString, string containerName)
+{
+    var appendBlobClient = new AppendBlobClient(connectionString, containerName, "appendBlob");
+    await appendBlobClient.CreateIfNotExistsAsync();
 
+    for (var i = 0; i < 100; i++)
+    {
+        var content = $"Test {i} {Environment.NewLine}";
+
+        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(content)))
+        {
+            await appendBlobClient.AppendBlockAsync(ms);
+        }
+    }
+}
