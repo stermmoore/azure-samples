@@ -22,3 +22,12 @@ await tableServiceClient.CreateTableIfNotExistsAsync(tableName);
 var tableClient = tableServiceClient.GetTableClient(tableName);
 
 await tableClient.AddEntityAsync<TableRecord>(new TableRecord { Name = "Dave" });
+
+
+//Query the table
+var allRecords = tableClient.QueryAsync<TableRecord>(r => r.PartitionKey == nameof(TableRecord));
+
+await foreach(var record in allRecords)
+{
+    Console.WriteLine($"{record.Timestamp} - {record.Name}");
+}
