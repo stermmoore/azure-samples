@@ -14,8 +14,14 @@ ARM can be decompiled to bicep using
 
 `az bicep decompile --file deployment.json`
 
+### Deploying bicep files
 
+cli
+`az deployment group create --resource-group rg-azure-samples --template-file deployment.bicep`
 
+ps
+
+`New-AzResourceGroupDeployment -ResourceGroupName rg-azure-samples -TemplateFile ./deployment.bicep`
 
 ## Consistency Levels
 
