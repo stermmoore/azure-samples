@@ -1,8 +1,7 @@
-param name string = 'sql-cosmos-00001'
+param name string = 'sql-cosmos-00002'
 param location string = 'ukwest'
 param locationName string = 'UK West'
 param defaultExperience string = 'Core (SQL)'
-param isZoneRedundant string = 'false'
 
 resource name_resource 'Microsoft.DocumentDb/databaseAccounts@2022-05-15-preview' = {
   kind: 'GlobalDocumentDB'
@@ -28,7 +27,6 @@ resource name_resource 'Microsoft.DocumentDb/databaseAccounts@2022-05-15-preview
     isVirtualNetworkFilterEnabled: false
     virtualNetworkRules: []
     ipRules: []
-    dependsOn: []
     enableMultipleWriteLocations: false
     capabilities: []
     enableFreeTier: true
@@ -41,3 +39,5 @@ resource name_resource 'Microsoft.DocumentDb/databaseAccounts@2022-05-15-preview
     'hidden-cosmos-mmspecial': ''
   }
 }
+
+output name string = name
