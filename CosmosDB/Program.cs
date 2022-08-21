@@ -61,7 +61,8 @@ async Task AddItem(string databaseName, string containerName, Reading item)
     var database = cosmosClient.GetDatabase(databaseName);
     var container = database.GetContainer(containerName);
 
-    await container.CreateItemAsync<Reading>(item);
+    var result = await container.CreateItemAsync<Reading>(item);
+    Console.WriteLine($"Add Item Charge: {result.RequestCharge}");
 }
 
 async Task Update(string databaseName, string containerName, Reading item)
@@ -84,12 +85,13 @@ async Task<IEnumerable<Reading>> GetAllReadings(string databaseName, string cont
     var queryDefinition = new QueryDefinition("SELECT * FROM c");
 
     var feedIterator = container.GetItemQueryIterator<Reading>(queryDefinition);
-
+    
     var result = new List<Reading>();
 
     while(feedIterator.HasMoreResults)
     {
         var response = await feedIterator.ReadNextAsync();
+        Console.WriteLine($"Feed Iterator Read Charege: {response.RequestCharge}");
 
         foreach(var reading in response)
         {
