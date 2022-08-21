@@ -10,6 +10,13 @@ check deployment
 
 `az cosmosdb show -g rg-azure-samples -n sql-cosmos-00001`
 
+ARM can be decompiled to bicep using
+
+`az bicep decompile --file deployment.json`
+
+
+
+
 ## Consistency Levels
 
 https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels
