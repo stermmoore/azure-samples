@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobStorage", "BlobStorage\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableStorage", "TableStorage\TableStorage.csproj", "{CF47D19D-E0DE-4E0D-8B08-C82AF0A3B4C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{88DB0152-5CAD-444E-9199-AEB462251D1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{88DB0152-5CAD-444E-9199-AEB462251D1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "Functions\Functions.csproj", "{F410E33E-7E01-4C03-BC5F-72380564FCEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{88DB0152-5CAD-444E-9199-AEB462251D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88DB0152-5CAD-444E-9199-AEB462251D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88DB0152-5CAD-444E-9199-AEB462251D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F410E33E-7E01-4C03-BC5F-72380564FCEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F410E33E-7E01-4C03-BC5F-72380564FCEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F410E33E-7E01-4C03-BC5F-72380564FCEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F410E33E-7E01-4C03-BC5F-72380564FCEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
