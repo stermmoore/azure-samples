@@ -1,0 +1,65 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string",
+      "defaultValue": "TestLinuxAppServicePlan"
+    },
+    "subscriptionId": {
+      "type": "string"
+    },
+    "serverFarmResourceGroup": {
+      "type": "string",
+      "defaultValue": "rg-azure-samples"
+    },
+    "webAppName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('name')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "UK South",
+      "kind": "linux",
+      "tags": {},
+      "properties": {
+        "name": "[parameters('name')]",
+        "workerSize": "0",
+        "workerSizeId": "0",
+        "numberOfWorkers": "1",
+        "reserved": true,
+        "zoneRedundant": false
+      },
+      "sku": {
+        "Tier": "Free",
+        "Name": "F1"
+      }
+    },
+    {
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('webAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "UK South",
+      "tags": {},
+      "dependsOn": [
+        "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('name'))]"
+      ],
+      "properties": {
+        "name": "[parameters('webAppName')]",
+        "siteConfig": {
+          "appSettings": [],
+          "linuxFxVersion": "DOTNETCORE|6.0",
+          "alwaysOn": "false",
+          "ftpsState": "FtpsOnly"
+        },
+        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('name'))]",
+        "clientAffinityEnabled": false,
+        "virtualNetworkSubnetId": null,
+        "httpsOnly": true
+      }
+    }
+  ]
+}
