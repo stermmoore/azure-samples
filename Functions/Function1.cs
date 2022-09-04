@@ -10,10 +10,16 @@ using Newtonsoft.Json;
 
 namespace Functions
 {
-    public static class Function1
+    public class Function1
     {
+        private readonly MessageService _messageService;
+        public Function1(MessageService messageService)
+        {
+            _messageService = messageService;
+        }
+
         [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -25,9 +31,7 @@ namespace Functions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            string responseMessage = _messageService.GetMessage();
 
             return new OkObjectResult(responseMessage);
         }
